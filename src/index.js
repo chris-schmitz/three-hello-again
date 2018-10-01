@@ -1,9 +1,7 @@
 window.THREE = require('three') // ! for debugging purposes, remove when done
 const Experience = require('./modules/Experience');
-const {
-    Cube,
-    makeHelper: makeCubeHelper
-} = require('./modules/Cube.js')
+const Cube = require('./modules/Cube.js')
+const Background = require('./modules/Background')
 
 const experience = Experience.make()
 if (process.env.DEVELOPMENT) {
@@ -69,7 +67,6 @@ const cube5 = Cube.make({
         const y = Math.floor(Math.random() * 10)
         const z = Math.floor(Math.random() * 10)
         const v = new THREE.Vector3(x, y, z)
-        console.log(v)
         cube.position.copy(v)
 
         const r = Math.floor(Math.random() * 256)
@@ -81,9 +78,37 @@ const cube5 = Cube.make({
         cube.material.color.set(color)
     }
 })
-// const helper = makeCubeHelper(cube1)
-// experience.addToScene(helper)
 
+const background = Background.make({
+    // wireframe: true,
+    scale: {
+        x: -1,
+        y: 1,
+        z: 1
+    },
+    radius: 50,
+    widthSegmeants: 50,
+    heighSegments: 50,
+    phiStart: 3,
+    phiLength: 3.1,
+    mediaSource: {
+        src: 'video/pano.webm'
+    },
+    callOnRender: background => {
+        // background.rotation.x += 0.01
+        // background.rotation.y += 0.01
+
+        // const r = Math.floor(Math.random() * 256)
+        // const g = Math.floor(Math.random() * 256)
+        // const b = Math.floor(Math.random() * 256)
+
+
+        // const color = new THREE.Color(`rgb(${r}, ${g}, ${b})`)
+        // background.material.color.set(color)
+    }
+})
+
+experience.addToScene(background)
 experience.addToScene(cube1)
 experience.addToScene(cube2)
 experience.addToScene(cube3)
@@ -91,6 +116,6 @@ experience.addToScene(cube4)
 experience.addToScene(cube5)
 
 experience.setCameraPosition({
-    z: 5
+    z: 20
 })
 experience.animate()

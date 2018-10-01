@@ -4,6 +4,7 @@ class Cube {
     constructor(object3d = null, config = {}) {
         this.object3d = object3d
         this.uuid = object3d.uuid
+        this.initialConfiguration = config
 
         if (config.hasOwnProperty('callOnRender')) {
             this.callOnRender = config.callOnRender
@@ -83,14 +84,5 @@ class Cube {
     }
 }
 
-function makeHelper(cube) {
-    const helper = new THREE.SkeletonHelper(cube)
-    helper.material.linewidth = 3
-    return helper
-}
 
-
-module.exports = {
-    Cube,
-    makeHelper
-}
+module.exports = Cube

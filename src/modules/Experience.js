@@ -35,8 +35,10 @@ class Experience {
     animate() {
         requestAnimationFrame(this.animate)
         descendAndAct(this.scene.children, child => {
-            let inventoryItem
-            if (inventoryItem = this.getFromInventory(child)) {
+            let inventoryItem = this.getFromInventory(child)
+            if (typeof inventoryItem === 'undefined' || inventoryItem === null) throw new Error(`Child isn't in experience inventory: ${child}`)
+
+            if (typeof inventoryItem.onRender !== undefined && typeof inventoryItem.onRender === 'function') {
                 inventoryItem.onRender(child)
             }
         })
