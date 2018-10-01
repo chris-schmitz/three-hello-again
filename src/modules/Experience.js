@@ -1,5 +1,8 @@
 const THREE = require('three')
 const autoBind = require('auto-bind')
+const {
+    descendAndAct
+} = require('@helpers/Traverser')
 
 
 
@@ -8,6 +11,7 @@ class Experience {
         this.scene = null
         this.camera = null
         this.renderer = null
+        this.sceneInventory = []
 
         autoBind(this)
     }
@@ -30,11 +34,17 @@ class Experience {
 
     animate() {
         requestAnimationFrame(this.animate)
-        this.scene.children[0].rotation.x += 0.01
-        this.scene.children[0].rotation.y += 0.01
+        descendAndAct(this.scene.children, child => {
+            let inventoryItem
+            if (inventoryItem = this.getFromInventory(child)) {
+                inventoryItem.onRender(child)
+            }
+        })
+
         this.renderer.render(this.scene, this.camera)
 
     }
+
 
     createScene() {
         const scene = new THREE.Scene()
@@ -74,7 +84,27 @@ class Experience {
 
     addToScene(thing = null) {
         // ? what kind of checks would we want here?
-        this.scene.add(thing)
+        this.addToSceneInventory(thing)
+        this.scene.add(thing.object3d)
+    }
+
+    addToSceneInventory(thing) {
+        // ? how would we handle nested things??
+        this.sceneInventory.push(thing)
+    }
+
+    removeFromSceneInventory(thing) {
+        // ? how would we handle nested things??
+
+    }
+
+    getFromInventory(entity) {
+        if (entity.hasOwnProperty('uuid')) {
+            const item = this.sceneInventory.filter(item => item.uuid === entity.uuid)
+            return Array.isArray(item) ? item[0] : item
+        }
+
+        throw new Error(`unable to find the entity in the inventory: ${entity}`)
     }
 
     setCameraPosition(config = {}) {

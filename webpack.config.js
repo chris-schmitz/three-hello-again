@@ -7,5 +7,10 @@ module.exports = {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js'
     },
-    devtool: 'eval-source-map'
+    devtool: 'eval-source-map',
+    resolve: {
+        alias: {
+            "@helpers": path.join(__dirname, 'src', 'helpers')
+        }
+    }
 }
