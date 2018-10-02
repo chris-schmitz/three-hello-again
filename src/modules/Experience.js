@@ -35,7 +35,7 @@ class Experience {
     animate() {
         requestAnimationFrame(this.animate)
         descendAndAct(this.scene.children, child => {
-            let inventoryItem = this.getFromInventory(child)
+            let inventoryItem = this.getFromInventory(child, 'object3d')
             if (typeof inventoryItem === 'undefined' || inventoryItem === null) throw new Error(`Child isn't in experience inventory: ${child}`)
 
             if (typeof inventoryItem.onRender !== undefined && typeof inventoryItem.onRender === 'function') {
@@ -100,13 +100,23 @@ class Experience {
 
     }
 
-    getFromInventory(entity) {
-        if (entity.hasOwnProperty('uuid')) {
-            const item = this.sceneInventory.filter(item => item.uuid === entity.uuid)
-            return Array.isArray(item) ? item[0] : item
-        }
+    getFromInventory(identifier, type, log = false) {
 
-        throw new Error(`unable to find the entity in the inventory: ${entity}`)
+        let item = null
+        // ! uuuuuuh I don't like how sloppy this whole thing is. refactor later when you care more
+        switch (type) {
+            case 'name':
+                item = this.sceneInventory
+                    .filter(item => item['object3d']['name'] === identifier)
+                break
+            case 'object3d':
+                identifier = identifier.uuid
+            case 'uuid':
+                item = this.sceneInventory.filter(item => item['uuid'] === identifier)
+                break
+        }
+        return item.length === 0 ? null : item[0]
+
     }
 
     setCameraPosition(config = {}) {

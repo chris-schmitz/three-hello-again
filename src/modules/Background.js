@@ -29,7 +29,7 @@ class Background {
     static makeObject3d(config = {}) {
         const workingConfig = Object.assign({
             name: 'unnamed-background-object',
-            color: 0xff0000,
+            color: 0xffffff,
             position: new THREE.Vector3(0, 0, 0),
             scale: {
                 x: 0,
@@ -126,9 +126,23 @@ class Background {
                 texture.minFilter = THREE.LinearFilter
                 texture.format = THREE.RGBFormat
                 break
+            default:
+                // * I'm going to assume the default of an image.
+                // * I think this whole thing could and should be restructured to better
+                // * handle types. Even adding a flag for `video` vs `image` could be preferrable.
+                // * for now I'm going to leave it like this b/c I want to move on to other stuff.
+                texture = new THREE.TextureLoader().load(mediaSourceConfig.src)
         }
 
         return texture
+    }
+
+    updateMedia(src) {
+        const config = {
+            src
+        }
+        const texture = Background.makeMediaTexture(config)
+        this.object3d.material.map = texture
     }
 
     get object3d() {

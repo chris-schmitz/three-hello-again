@@ -81,30 +81,23 @@ const cube5 = Cube.make({
 
 const background = Background.make({
     // wireframe: true,
+    name: 'background',
     scale: {
         x: -1,
         y: 1,
         z: 1
     },
-    radius: 50,
-    widthSegmeants: 50,
-    heighSegments: 50,
-    phiStart: 3,
-    phiLength: 3.1,
+    radius: 500,
+    widthSegmeants: 60,
+    heighSegments: 40,
+    // phiStart: 2,
+    // phiLength: Math.PI,
     mediaSource: {
+        // src: 'images/room.jpg'
         src: 'video/pano.webm'
     },
     callOnRender: background => {
-        // background.rotation.x += 0.01
-        // background.rotation.y += 0.01
-
-        // const r = Math.floor(Math.random() * 256)
-        // const g = Math.floor(Math.random() * 256)
-        // const b = Math.floor(Math.random() * 256)
-
-
-        // const color = new THREE.Color(`rgb(${r}, ${g}, ${b})`)
-        // background.material.color.set(color)
+        background.rotation.y += 0.001
     }
 })
 
