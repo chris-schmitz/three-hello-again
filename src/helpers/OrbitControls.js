@@ -1,5 +1,5 @@
 const THREE = require('three')
-require('@three/controls/OrbitControls')
+require('three/examples/js/controls/OrbitControls')
 
 class OrbitControls {
     constructor(camera, rendererElement) {

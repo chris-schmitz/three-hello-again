@@ -11,7 +11,6 @@ module.exports = {
     resolve: {
         alias: {
             "@helpers": path.join(__dirname, 'src', 'helpers'),
-            "@three/controls": path.join(__dirname, 'node_modules', 'three', 'examples', 'js', 'controls')
         }
     }
 }
