@@ -109,6 +109,6 @@ experience.addToScene(cube4)
 experience.addToScene(cube5)
 
 experience.setCameraPosition({
-    z: 20
+    z: 10
 })
 experience.animate()

@@ -3,6 +3,7 @@ const autoBind = require('auto-bind')
 const {
     descendAndAct
 } = require('@helpers/Traverser')
+const OrbitControls = require('@helpers/OrbitControls')
 
 
 
@@ -28,12 +29,14 @@ class Experience {
         this.scene = this.createScene()
         this.camera = this.createCamera()
         this.renderer = this.createRenderer()
+        this.controls = this.createControls()
 
         document.body.appendChild(this.renderer.domElement)
     }
 
     animate() {
         requestAnimationFrame(this.animate)
+        this.controls.update()
         descendAndAct(this.scene.children, child => {
             let inventoryItem = this.getFromInventory(child, 'object3d')
             if (typeof inventoryItem === 'undefined' || inventoryItem === null) throw new Error(`Child isn't in experience inventory: ${child}`)
@@ -45,6 +48,10 @@ class Experience {
 
         this.renderer.render(this.scene, this.camera)
 
+    }
+
+    createControls() {
+        return OrbitControls.make(this.camera, this.renderer.domElement)
     }
 
 

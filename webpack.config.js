@@ -10,7 +10,8 @@ module.exports = {
     devtool: 'eval-source-map',
     resolve: {
         alias: {
-            "@helpers": path.join(__dirname, 'src', 'helpers')
+            "@helpers": path.join(__dirname, 'src', 'helpers'),
+            "@three/controls": path.join(__dirname, 'node_modules', 'three', 'examples', 'js', 'controls')
         }
     }
 }
