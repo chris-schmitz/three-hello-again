@@ -37,14 +37,32 @@ class Experience {
     animate() {
         requestAnimationFrame(this.animate)
         this.controls.update()
-        descendAndAct(this.scene.children, child => {
-            let inventoryItem = this.getFromInventory(child, 'object3d')
-            if (typeof inventoryItem === 'undefined' || inventoryItem === null) throw new Error(`Child isn't in experience inventory: ${child}`)
 
-            if (typeof inventoryItem.onRender !== undefined && typeof inventoryItem.onRender === 'function') {
-                inventoryItem.onRender(child)
-            }
-        })
+        this.scene.children.map(child => {
+                if (child.type === 'Group') {
+                    return child.children
+                }
+                return child
+            })
+            .reduce((carry, current) => {
+                return carry.concat(current)
+            }, [])
+            .map(child => {
+                return this.getFromInventory(child, 'object3d')
+            })
+            .forEach(item => {
+                item.onRender()
+            })
+
+
+        // // descendAndAct(this.scene.children, child => {
+        // //     let inventoryItem = this.getFromInventory(child, 'object3d')
+        // //     if (typeof inventoryItem === 'undefined' || inventoryItem === null) throw new Error(`Child isn't in experience inventory: ${child}`)
+
+        // //     if (typeof inventoryItem.onRender !== undefined && typeof inventoryItem.onRender === 'function') {
+        // //         inventoryItem.onRender(child)
+        // //     }
+        // // })
 
         this.renderer.render(this.scene, this.camera)
 
@@ -59,7 +77,6 @@ class Experience {
         const scene = new THREE.Scene()
         scene.name = "experience-secene"
         if (process.env.DEVELOPMENT) {
-            console.log('Adding scene to the window')
             window.scene = scene
         }
         return scene
@@ -94,12 +111,19 @@ class Experience {
     addToScene(thing = null) {
         // ? what kind of checks would we want here?
         this.addToSceneInventory(thing)
-        this.scene.add(thing.object3d)
+        this.scene.add(thing.object3d) // ? cut?
     }
 
-    addToSceneInventory(thing) {
-        // ? how would we handle nested things??
-        this.sceneInventory.push(thing)
+    addToSceneInventory(entity) {
+        // ? how would we handle nested entitys??
+        if (entity.hasOwnProperty('interactable') && entity.interactable === true) {
+            this.controls.addIntersectableItem(entity.object3d)
+        } else {
+            this.scene.add(entity.object3d)
+        }
+        this.sceneInventory.push(
+            entity
+        )
     }
 
     removeFromSceneInventory(thing) {
@@ -119,7 +143,8 @@ class Experience {
             case 'object3d':
                 identifier = identifier.uuid
             case 'uuid':
-                item = this.sceneInventory.filter(item => item['uuid'] === identifier)
+                item = this.sceneInventory
+                    .filter(item => item['uuid'] === identifier)
                 break
         }
         return item.length === 0 ? null : item[0]

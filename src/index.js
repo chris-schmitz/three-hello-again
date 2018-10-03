@@ -11,13 +11,15 @@ if (process.env.DEVELOPMENT) {
 
 const cube1 = Cube.make({
     name: 'test-cube-1',
+    interactable: true,
     position: new THREE.Vector3(1, 2, 0),
     callOnRender: cube => {
-        cube.rotation.y += 0.01
+        // cube.rotation.y += 0.01
     }
 })
 const cube2 = Cube.make({
     name: 'test-cube-2',
+    interactable: false,
     position: {
         x: -1,
         y: -1,
@@ -73,7 +75,6 @@ const cube5 = Cube.make({
         const g = Math.floor(Math.random() * 256)
         const b = Math.floor(Math.random() * 256)
 
-
         const color = new THREE.Color(`rgb(${r}, ${g}, ${b})`)
         cube.material.color.set(color)
     }
@@ -109,6 +110,8 @@ experience.addToScene(cube4)
 experience.addToScene(cube5)
 
 experience.setCameraPosition({
-    z: 10
+    z: 0,
+    x: 0,
+    y: 0
 })
 experience.animate()

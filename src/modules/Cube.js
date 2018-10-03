@@ -5,6 +5,7 @@ class Cube {
         this.object3d = object3d
         this.uuid = object3d.uuid
         this.initialConfiguration = config
+        this.interactable = config.interactable || true
 
         if (config.hasOwnProperty('callOnRender')) {
             this.callOnRender = config.callOnRender

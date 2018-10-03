@@ -50,7 +50,7 @@ function _traverse(entity, callable) {
 
     workingArray.forEach(child => {
         if (child.type === "Group") {
-            descendAndDispose(child.children)
+            descendAndAct(child.children)
         } else if (Array.isArray(child)) {
             workingArray.forEach(child => callable(child))
         } else {
